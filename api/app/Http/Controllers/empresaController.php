@@ -58,7 +58,7 @@ class empresaController extends Controller
         $empresa->Correo = $request->get('Correo');
         $empresa->Logo = $request->get('Logo');
         $file = $request->file('Logo');
-        $filename =  strtoupper($request->get("RUC")) . "." . $file->getClientOriginalExtension();
+        $filename =  $request->get("RUC") . "." . $file->getClientOriginalExtension();
         $path = public_path() . '/logos/';
         $file->move($path, $filename);
         $empresa->Logo = $filename;
