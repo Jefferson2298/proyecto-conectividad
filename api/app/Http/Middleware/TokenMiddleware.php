@@ -21,7 +21,7 @@ class TokenMiddleware
         try {
             JWTAuth::setToken($token); // setToken and check
             if (!$claim = JWTAuth::getPayload()) {
-                return response()->json(array('msg' => 'Usario no encontrado'), 404);
+                return response()->json(array('msg' => 'Token no encontrado'), 404);
             }
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             return response()->json(array('msg' => 'Token expirado'), 404);

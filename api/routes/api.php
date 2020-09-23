@@ -17,9 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+//TOKEN
+Route::get('token','BienvenidoController@getToken');
 // CRUD DE EMPRESA
-Route::get('empresas', 'empresaController@inicio');
+Route::get('empresas', 'empresaController@inicio')->middleware('token');
 Route::get('empresaMostrar', 'empresaController@mostrarEmpresa');
 Route::get('tablaEmpresa', 'empresaController@tablaEmpresa');
 Route::get('empresas/{id}', 'empresaController@mostrar');

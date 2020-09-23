@@ -1,7 +1,10 @@
 import { url } from "./config";
+import { token } from "./config";
 
 export async function get(peticion) {
-  let respuesta = await fetch(url + peticion);
+  let respuesta = await fetch(url + peticion, {
+    headers: { Authorization: getToken().token },
+  });
   if (!respuesta.ok) throw new Error(respuesta.text);
 
   return respuesta.json();
@@ -44,4 +47,9 @@ export async function enviarConArchivos(peticion, datos) {
   if (!respuesta.ok) throw new Error(respuesta.text);
 
   return respuesta.json();
+}
+
+export async function getToken(){
+  console.log(await fetch(token));
+  return await fetch(token);
 }
