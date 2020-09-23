@@ -25,7 +25,7 @@ class empresaController extends Controller
 
     public function tablaEmpresa()
     {
-        return empresa::all('Codigo','RUC', 'RazonSocial', 'Correo', 'Vigencia');
+        return empresa::all('Codigo', 'RUC', 'RazonSocial', 'Correo', 'Vigencia');
     }
 
     public function mostrar($id)
@@ -38,14 +38,14 @@ class empresaController extends Controller
         $validacion = Validator::make($request->all(), [
             'RazonSocial' => 'required|max:100',
             'RUC' => 'required|unique:empresa|max:11',
-            'Facebook' => 'max:100',
-            'Instagram' => 'max:100',
-            'Youtube' => 'max:100',
-            'Whatsapp' => 'max:100',
             'Correo' => 'required|max:100',
+        ], [
+            'unique' => ':attribute ya se encuentra registrado',
+            'required' => ':attribute es obligatorio',
+            'max' => ':attribute llego al limite de letras'
         ]);
         if ($validacion->fails()) {
-            return response()->json($validacion, 400);
+            return response()->json($validacion->errors()->first(), 400);
         }
         $empresa = new empresa();
 
