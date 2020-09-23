@@ -3,7 +3,7 @@ import { token } from "./config";
 
 export async function get(peticion) {
   let respuesta = await fetch(url + peticion, {
-    headers: { Authorization: getToken().token },
+    headers: { Authorization: await getToken() },
   });
   if (!respuesta.ok) throw new Error(respuesta.text);
 
@@ -15,6 +15,7 @@ async function call(peticion, datos, method) {
     method,
     body: JSON.stringify(datos),
     headers: {
+      Authorization: await getToken(),
       "Content-Type": "application/json",
     },
   });
@@ -43,6 +44,10 @@ export async function enviarConArchivos(peticion, datos) {
   let respuesta = await fetch(url + peticion, {
     method: "POST",
     body: datos,
+    headers: {
+      Authorization: await getToken(),
+      "Content-Type": "application/json",
+    },
   });
   if (!respuesta.ok) throw new Error(respuesta.text);
 
@@ -51,5 +56,6 @@ export async function enviarConArchivos(peticion, datos) {
 
 export async function getToken(){
   console.log(await fetch(token));
-  return await fetch(token);
+  let respuesta = await fetch(token);
+  return respuesta.json();
 }

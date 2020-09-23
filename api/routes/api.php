@@ -21,11 +21,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('token','BienvenidoController@getToken');
 // CRUD DE EMPRESA
 Route::get('empresas', 'empresaController@inicio')->middleware('token');
-Route::get('empresaMostrar', 'empresaController@mostrarEmpresa');
-Route::get('tablaEmpresa', 'empresaController@tablaEmpresa');
-Route::get('empresas/{id}', 'empresaController@mostrar');
-Route::post('empresas', 'empresaController@registrar');
-Route::post('empresas/{id}', 'empresaController@actualizar');
-Route::delete('empresa/{id}', 'empresaController@eliminar');
-Route::patch('empresa/{id}', 'empresaController@cambiarEstado');
+Route::get('empresaMostrar', 'empresaController@mostrarEmpresa')->middleware('token');
+Route::get('tablaEmpresa', 'empresaController@tablaEmpresa')->middleware('token');
+Route::get('empresas/{id}', 'empresaController@mostrar')->middleware('token');
+Route::post('empresas', 'empresaController@registrar')->middleware('token');
+Route::post('empresas/{id}', 'empresaController@actualizar')->middleware('token');
+Route::delete('empresa/{id}', 'empresaController@eliminar')->middleware('token');
+Route::patch('empresa/{id}', 'empresaController@cambiarEstado')->middleware('token');
 // *********************************************************
