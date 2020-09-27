@@ -16,7 +16,6 @@ async function call(peticion, datos, method) {
     body: JSON.stringify(datos),
     headers: {
       Authorization: await getToken(),
-      "Content-Type": "application/json",
     },
   });
   if (!respuesta.ok) throw new Error(respuesta.text);
@@ -46,7 +45,6 @@ export async function enviarConArchivos(peticion, datos) {
     body: datos,
     headers: {
       Authorization: await getToken(),
-      "Content-Type": "application/json",
     },
   });
   if (!respuesta.ok) throw new Error(respuesta.text);
