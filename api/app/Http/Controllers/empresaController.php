@@ -56,12 +56,13 @@ class empresaController extends Controller
         $empresa->Youtube = $request->get('Youtube');
         $empresa->Whatsapp = $request->get('Whatsapp');
         $empresa->Correo = $request->get('Correo');
-        $empresa->Logo = $request->get('Logo');
-        $file = $request->file('Logo');
-        $filename =  $request->get("RUC") . "." . $file->getClientOriginalExtension();
-        $path = public_path() . '/logos/';
-        $file->move($path, $filename);
-        $empresa->Logo = $filename;
+        if ($request->hasFile('Logo')) {
+            $file = $request->file('Logo');
+            $filename =  $request->get("RUC") . "." . $file->getClientOriginalExtension();
+            $path = public_path() . '/logos/';
+            $file->move($path, $filename);
+            $empresa->Logo = $filename;
+        }
         $empresa->save();
 
 
@@ -90,12 +91,13 @@ class empresaController extends Controller
         $empresa->Youtube = $request->get('Youtube');
         $empresa->Whatsapp = $request->get('Whatsapp');
         $empresa->Correo = $request->get('Correo');
-        $empresa->Logo = $request->get('Logo');
-        $file = $request->file('Logo');
-        $filename =  strtoupper($request->get("RUC")) . "." . $file->getClientOriginalExtension();
-        $path = public_path() . '/logos/';
-        $file->move($path, $filename);
-        $empresa->Logo = $filename;
+        if ($request->hasFile('Logo')) {
+            $file = $request->file('Logo');
+            $filename =  strtoupper($request->get("RUC")) . "." . $file->getClientOriginalExtension();
+            $path = public_path() . '/logos/';
+            $file->move($path, $filename);
+            $empresa->Logo = $filename;
+        }
         $empresa->save();
         return response()->json($empresa, 200);
     }
