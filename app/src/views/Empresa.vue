@@ -288,6 +288,7 @@ export default {
       this.Correo = "";
       this.Logo = null;
       this.ver = false;
+      this.edit = false;
     },
     executeEventClick() {
       if (this.edit === false) {

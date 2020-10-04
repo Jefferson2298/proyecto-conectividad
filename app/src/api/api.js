@@ -37,6 +37,9 @@ export async function patch(peticion, datos) {
 export async function del(peticion) {
   return await fetch(url + peticion, {
     method: "DELETE",
+    headers: {
+      Authorization: await getToken(),
+    },
   });
 }
 export async function enviarConArchivos(peticion, datos) {
@@ -52,7 +55,7 @@ export async function enviarConArchivos(peticion, datos) {
   return respuesta.json();
 }
 
-export async function getToken(){
+export async function getToken() {
   console.log(await fetch(token));
   let respuesta = await fetch(token);
   return respuesta.json();
