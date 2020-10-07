@@ -12,8 +12,7 @@ class empresaController extends Controller
     public function inicio()
     {
         $empresa = DB::table('empresa as e')
-            ->select('e.RUC', 'e.RazonSocial', 'e.Correo', 'e.Codigo')
-            ->where('e.Vigencia', '=', 1)
+            ->select('e.RUC', 'e.RazonSocial', 'e.Correo', 'e.Codigo','e.Vigencia')
             ->get();
         return response()->json($empresa, 200);
     }

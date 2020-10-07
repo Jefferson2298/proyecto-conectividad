@@ -10,25 +10,40 @@
           icon="mdi-cloud-alert"
           close-text="Close Alert"
           dismissible
-        >Ocurrio un error.</v-alert>
+          >Ocurrio un error.</v-alert
+        >
       </v-col>
     </v-row>
     <v-row class="pa-5 align-center">
       <v-col>
-        <v-btn fab large dark color="blue darken-3" @click="dialogEjemplo = true">
+        <v-btn
+          fab
+          large
+          dark
+          color="blue darken-3"
+          @click="dialogEjemplo = true"
+        >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </v-col>
       <v-col cols="11">
-        <h2 class="font-weight-regular text-center">Mantenimiento de Empresa</h2>
+        <h2 class="font-weight-regular text-center">
+          Mantenimiento de Empresa
+        </h2>
       </v-col>
     </v-row>
     <v-dialog v-model="dialogEjemplo" persistent scrollable max-width="60vw">
       <v-card>
         <v-card-title class="headline indigo darken-4">
-          <span v-if="edit" class="headline" style="color:white;">Editar Empresa</span>
-          <span v-else-if="ver" class="headline" style="color:white;">Ver Empresa</span>
-          <span v-else class="headline" style="color:white;">Nueva Empresa</span>
+          <span v-if="edit" class="headline" style="color: white"
+            >Editar Empresa</span
+          >
+          <span v-else-if="ver" class="headline" style="color: white"
+            >Ver Empresa</span
+          >
+          <span v-else class="headline" style="color: white"
+            >Nueva Empresa</span
+          >
         </v-card-title>
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation>
@@ -47,7 +62,7 @@
                 <v-text-field
                   :disabled="ver"
                   v-model="RUC"
-                  :rules="[fieldRules.required,fieldRules.validateRuc]"
+                  :rules="[fieldRules.required, fieldRules.validateRuc]"
                   label="RUC"
                   type="number"
                   maxlength="11"
@@ -97,7 +112,7 @@
                 <v-text-field
                   :disabled="ver"
                   v-model="Correo"
-                  :rules="[fieldRules.required,fieldRules.email]"
+                  :rules="[fieldRules.required, fieldRules.email]"
                   label="Correo"
                   prepend-icon="mdi-email"
                   required
@@ -124,7 +139,8 @@
             color="indigo darken-4"
             text
             @click="(dialogEjemplo = false), limpiar()"
-          >Cerrar</v-btn>
+            >Cerrar</v-btn
+          >
           <v-btn
             v-if="!ver"
             :loading="saveLoading"
@@ -134,17 +150,37 @@
             depressed
             @mousedown="validate"
             @click="executeEventClick"
-          >Guardar</v-btn>
+            >Guardar</v-btn
+          >
           <v-btn
             v-if="ver"
             color="indigo darken-4"
             text
             @click="(dialogEjemplo = false), limpiar()"
-          >Cerrar</v-btn>
+            >Cancelar</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-tabs>
+    <v-data-table :headers="headers2"  :items="empresas" :search="search">
+      <template v-slot:[`item.Vigencia`]="{ item }">
+        <v-chip :color="item.Vigencia ? 'green' : 'red'" dark></v-chip>
+      </template>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-icon class="mr-2" @click="verEmpresa(item)">mdi-eye</v-icon>
+        <v-icon class="mr-2" @click="cambiarEstadoEmpresa(item)">{{
+          item.Vigencia ? "mdi-do-not-disturb" : "mdi-check-box-outline"
+        }}</v-icon>
+      </template>
+    </v-data-table>
+    <!-- <tables-mostrar
+      :headers="headers"
+      :options="options"
+      :withOptions="true"
+      ref="empresaTable"
+      entity="empresas"
+    /> -->
+    <!-- <v-tabs>
       <v-tab>Tabla 1</v-tab>
       <v-tab>Tabla 2</v-tab>
       <v-tab-item>
@@ -186,7 +222,7 @@
           </v-col>
         </v-row>
       </v-tab-item>
-    </v-tabs>
+    </v-tabs> -->
   </v-content>
 </template>
 
@@ -195,9 +231,9 @@ import { del, get, enviarConArchivos, patch } from "../api/api";
 import { logos } from "../api/config";
 
 export default {
-  components: {
-    TablesMostrar: () => import("../components/TablesMostrar"),
-  },
+  // components: {
+  //   TablesMostrar: () => import("../components/TablesMostrar"),
+  // },
   data() {
     return {
       edit: false,
@@ -257,12 +293,12 @@ export default {
           function: this.showEditEmpresa,
         },
         {
-          name: "Eliminar",
-          icon: "mdi-delete",
+          name: "Cambiar vigencia",
+          icon: "mdi-check-box-outline",
           function: this.deleteEmpresa,
         },
       ],
-      empresas: "",
+      empresas: [],
       search: "",
       RUC: "",
       RazonSocial: "",
