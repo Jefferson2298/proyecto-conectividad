@@ -29,3 +29,12 @@ Route::post('empresas/{id}', 'empresaController@actualizar')->middleware('token'
 Route::delete('empresa/{id}', 'empresaController@eliminar')->middleware('token');
 Route::patch('empresa/{id}', 'empresaController@cambiarEstado')->middleware('token');
 // *********************************************************
+// CRUD DE SISTEMA DE PENSIONES
+
+Route::get('sistemasdepensiones', 'sistemadepensionController@inicio')->middleware('token');
+Route::get('tablaSistemaDePension', 'sistemadepensionController@tablaSistemaDePension')->middleware('token');
+Route::get('sistemasdepensiones/{id}', 'sistemadepensionController@mostrar')->middleware('token');
+Route::post('sistemasdepensiones', 'sistemadepensionController@registrar')->middleware('token');
+Route::post('sistemasdepensiones/{id}', 'sistemadepensionController@actualizar')->middleware('token');
+Route::delete('sistemadepension/{id}', 'sistemadepensionController@eliminar')->middleware('token');
+Route::patch('sistemadepension/{id}', 'sistemadepensionController@cambiarEstado')->middleware('token');

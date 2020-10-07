@@ -35,6 +35,15 @@
             <v-list-item-title>Empresa</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item to="/sistemadepensiones" link>
+          <v-list-item-icon>
+            <v-icon>mdi-view-dashboard</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Sistema De Pensiones</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main>

@@ -12,8 +12,8 @@ export async function get(peticion) {
 
 async function call(peticion, datos, method) {
   let respuesta = await fetch(url + peticion, {
-    method,
-    body: JSON.stringify(datos),
+    method: method,
+    body: datos,
     headers: {
       Authorization: await getToken(),
     },
