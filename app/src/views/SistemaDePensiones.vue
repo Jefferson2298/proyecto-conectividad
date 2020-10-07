@@ -120,10 +120,12 @@
                   <td>{{ item.indice }}</td>
                   <td>{{ item.Nombre }}</td>
                   <td>{{ item.Siglas }}</td>
-                <v-icon class="mr-2" @click="showEditSistemaDePension(item)">mdi-pencil</v-icon>
-                <v-icon class="mr-2" @click="cambiarEstadoSistemaDePension(item)">
-                  {{item.Vigencia? "mdi-do-not-disturb": "mdi-check-box-outline"}}
-                </v-icon>
+                  <td>
+                    <v-icon class="mr-2" @click="showEditSistemaDePension(item)">mdi-pencil</v-icon>
+                    <v-icon class="mr-2" @click="cambiarEstadoSistemaDePension(item)">
+                      {{item.Vigencia? "mdi-do-not-disturb": "mdi-check-box-outline"}}
+                    </v-icon>
+                  </td>
                 </tr>
               </template>
             </v-data-table>
