@@ -352,7 +352,7 @@ export default {
       enviarConArchivos("empresas", this.assembleEmpresa()).then(() => {
         this.saveLoading = false;
         this.dialogEjemplo = false;
-        this.$refs.empresaTable.fetchData();
+        // this.$refs.empresaTable.fetchData();
         this.limpiar();
         this.actualizarEmpresas();
       });
@@ -365,7 +365,7 @@ export default {
           this.saveLoading = false;
           this.editId = null;
           this.dialogEjemplo = false;
-          this.$refs.empresaTable.fetchData();
+          // this.$refs.empresaTable.fetchData();
           this.limpiar();
         })
         .catch(() => {
