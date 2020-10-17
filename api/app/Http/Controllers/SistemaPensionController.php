@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\sistemadepension;
+use App\SistemaPension;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class sistemadepensionController extends Controller
+class SistemaPensionController extends Controller
 {
-    public function inicio()
+    public function listar()
     {
         $sistemapension = DB::table('sistemapensiones as sp')
             ->select('sp.Codigo', 'sp.Nombre', 'sp.Siglas','sp.Vigencia')
@@ -22,20 +22,9 @@ class sistemadepensionController extends Controller
         return response()->json($sistemapension, 200);
     }
 
-    public function tablaSistemaDePension()
+    public function leer($id)
     {
-        $sistemapension = sistemadepension::all('Codigo', 'Nombre', 'Siglas','Vigencia');
-        $count  = 1;
-        foreach ($sistemapension  as $aux) {
-            $aux->indice = $count;
-            $count ++;
-        }
-        return $sistemapension;
-    }
-
-    public function mostrar($id)
-    {
-        return sistemadepension::find($id);
+        return SistemaPension::find($id);
     }
 
     public function registrar(Request $request)
@@ -50,7 +39,7 @@ class sistemadepensionController extends Controller
         if ($validacion->fails()) {
             return response()->json($validacion->errors()->first(), 400);
         }
-        $sistemapension = new sistemadepension();
+        $sistemapension = new SistemaPension();
 
         $sistemapension->Nombre = $request->get('Nombre');
         $sistemapension->Siglas = $request->get('Siglas');
@@ -60,6 +49,7 @@ class sistemadepensionController extends Controller
         return response()->json($sistemapension, 201);
     }
 
+    ///public function actualizar(Request $request, $id)
     public function actualizar(Request $request, $id)
     {
         $validacion = Validator::make($request->all(), [
@@ -69,16 +59,16 @@ class sistemadepensionController extends Controller
         if ($validacion->fails()) {
             return response()->json($validacion, 400);
         }
-        $sistemapension = sistemadepension::findOrFail($id);
+        $sistemapension = SistemaPension::findOrFail($id);
         $sistemapension->Nombre = $request->get('Nombre');
         $sistemapension->Siglas = $request->get('Siglas');
-        $sistemapension->save();
+        $sistemapension->update();
         return response()->json($sistemapension, 200);
     }
 
     public function eliminar($id)
     {
-        $sistemapension = sistemadepension::findOrFail($id);
+        $sistemapension = SistemaPension::findOrFail($id);
         $sistemapension->Vigencia = 0;
         $sistemapension->save();
 
@@ -87,7 +77,7 @@ class sistemadepensionController extends Controller
 
     public function cambiarEstado($id)
     {
-        $sistemadepension = sistemadepension::findOrFail($id);
+        $sistemadepension = SistemaPension::findOrFail($id);
         $sistemadepension->Vigencia = !$sistemadepension->Vigencia;
         $sistemadepension->save();
 

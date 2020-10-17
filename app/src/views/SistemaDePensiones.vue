@@ -10,8 +10,7 @@
           icon="mdi-cloud-alert"
           close-text="Close Alert"
           dismissible
-          >Ocurrio un error.</v-alert
-        >
+          >Ocurrio un error.</v-alert>
       </v-col>
     </v-row>
     <v-row class="pa-5 align-center">
@@ -45,20 +44,18 @@
             <v-row>
               <v-col cols="6">
                 <v-text-field
-                  :disabled="ver"
                   v-model="Nombre"
                   :rules="[fieldRules.required]"
-                  label="Nombre"
+                  label="Nombre *"
                   prepend-icon="mdi-domain"
                   required
                 ></v-text-field>
               </v-col>
               <v-col cols="6">
                 <v-text-field
-                  :disabled="ver"
                   v-model="Siglas"
                   :rules="[fieldRules.required]"
-                  label="Siglas"
+                  label="Siglas *"
                   prepend-icon="mdi-domain"
                   required
                 ></v-text-field>
@@ -69,14 +66,19 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            v-if="!ver"
+            v-if="edit"
             color="indigo darken-4"
             text
             @click="(dialogEjemplo = false), limpiar()"
-            >Cerrar</v-btn
-          >
+            >Cancelar</v-btn>
+            <v-btn
+            v-else
+            color="indigo darken-4"
+            text
+            @click="(dialogEjemplo = false), limpiar()"
+            >Cerrar</v-btn>
           <v-btn
-            v-if="!ver"
+            v-if="edit"
             :loading="saveLoading"
             :disabled="saveLoading"
             color="indigo darken-4"
@@ -84,15 +86,17 @@
             depressed
             @mousedown="validate"
             @click="executeEventClick"
-            >Guardar</v-btn
-          >
-          <v-btn
-            v-if="ver"
+            >Modificar</v-btn>
+            <v-btn
+            v-else
+            :loading="saveLoading"
+            :disabled="saveLoading"
             color="indigo darken-4"
-            text
-            @click="(dialogEjemplo = false), limpiar()"
-            >Cerrar</v-btn
-          >
+            class="ma-2 white--text"
+            depressed
+            @mousedown="validate"
+            @click="executeEventClick"
+            >Guardar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -121,9 +125,13 @@
                   <td>{{ item.Nombre }}</td>
                   <td>{{ item.Siglas }}</td>
                   <td>
-                    <v-icon class="mr-2" @click="showEditSistemaDePension(item)">mdi-pencil</v-icon>
-                    <v-icon class="mr-2" @click="cambiarEstadoSistemaDePension(item)">
-                      {{item.Vigencia? "mdi-do-not-disturb": "mdi-check-box-outline"}}
+                    <v-icon v-if="item.Vigencia" class="mr-2" @click="showEditSistemaDePension(item)">mdi-border-color</v-icon>
+                    <v-icon v-else class="mr-2" color="red" @click="showEditSistemaDePension(item)">mdi-border-color</v-icon>
+                    <v-icon v-if="item.Vigencia" class="mr-2" @click="cambiarEstadoSistemaDePension(item)">
+                      {{item.Vigencia? "mdi-close-circle-outline": "mdi-checkbox-marked-circle-outline"}}
+                    </v-icon>
+                    <v-icon v-else class="mr-2" color="red" @click="cambiarEstadoSistemaDePension(item)">
+                      {{item.Vigencia? "mdi-close-circle-outline": "mdi-checkbox-marked-circle-outline"}}
                     </v-icon>
                   </td>
                 </tr>
@@ -137,14 +145,13 @@
 </template>
 
 <script>
-import { get, post, patch } from "../api/api";
+import { get, post, patch} from "../api/api";
 
 export default {
   components: {},
   data() {
     return {
       edit: false,
-      ver: false,
       alert: false,
       valid: true,
       saveLoading: false,
@@ -155,7 +162,7 @@ export default {
       },
       headers: [
         {
-          text: "#",
+          text: "N°",
           align: "start",
           sortable: false,
           value: "indice",
@@ -185,7 +192,6 @@ export default {
     limpiar() {
       this.Nombre = "";
       this.Siglas = "";
-      this.ver = false;
     },
     executeEventClick() {
       if (this.edit === false) {
@@ -215,19 +221,15 @@ export default {
     editSistemaDePension() {
       if (this.valid == false) return;
       this.saveLoading = true;
-      post(
-        "sistemasdepensiones/" + this.editId,
-        this.assembleSistemaDePension()
-      )
-        .then(() => {
+      post("sistemasdepensiones/" + this.editId,this.assembleSistemaDePension()).then(() => {
           this.saveLoading = false;
           this.editId = null;
           this.dialogEjemplo = false;
+          this.edit = false;
           this.fetchData();
           this.limpiar();
-        })
-        .catch(() => {
-          this.alert = true;
+        }).catch(() => {
+          this.alert = true;          ///dfs
         });
     },
     showEditSistemaDePension(sistemadepension) {
@@ -248,7 +250,7 @@ export default {
         });
     },
     actualizarSistemasDePensiones() {
-      get("tablaSistemaDePension").then((data) => {
+       get("sistemasdepensiones").then((data) => {
         this.sistemasdepensiones = data;
       });
     },
@@ -267,7 +269,6 @@ export default {
 
 <style>
   tr.desactivo{
-    background-color: rgb(165, 93, 88);
-    color: silver;
+    color: red;
   }
 </style>
