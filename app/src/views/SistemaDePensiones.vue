@@ -1,18 +1,5 @@
 <template>
   <v-main>
-    <v-row align="center" class="pa-5 align-center">
-      <v-col cols="4">
-        <v-alert
-          v-model="alert"
-          text
-          prominent
-          type="error"
-          icon="mdi-cloud-alert"
-          close-text="Close Alert"
-          dismissible
-          >Ocurrio un error.</v-alert>
-      </v-col>
-    </v-row>
     <v-row class="pa-5 align-center">
       <v-col>
         <v-btn
@@ -127,10 +114,10 @@
                   <td>
                     <v-icon v-if="item.Vigencia" class="mr-2" @click="showEditSistemaDePension(item)">mdi-border-color</v-icon>
                     <v-icon v-else class="mr-2" color="red" @click="showEditSistemaDePension(item)">mdi-border-color</v-icon>
-                    <v-icon v-if="item.Vigencia" class="mr-2" @click="cambiarEstadoSistemaDePension(item)">
+                    <v-icon v-if="item.Vigencia" class="mr-2" @click="cambiarVigenciaSistemaDePension(item)">
                       {{item.Vigencia? "mdi-close-circle-outline": "mdi-checkbox-marked-circle-outline"}}
                     </v-icon>
-                    <v-icon v-else class="mr-2" color="red" @click="cambiarEstadoSistemaDePension(item)">
+                    <v-icon v-else class="mr-2" color="red" @click="cambiarVigenciaSistemaDePension(item)">
                       {{item.Vigencia? "mdi-close-circle-outline": "mdi-checkbox-marked-circle-outline"}}
                     </v-icon>
                   </td>
@@ -145,14 +132,15 @@
 </template>
 
 <script>
-import { get, post, patch} from "../api/api";
+import { get, post, patch, put} from "../api/api";
+import Swal from "sweetalert2";
+//import { Toast } from "../plugins/toast";
 
 export default {
   components: {},
   data() {
     return {
       edit: false,
-      alert: false,
       valid: true,
       saveLoading: false,
       dialogEjemplo: false,
@@ -216,20 +204,59 @@ export default {
         this.fetchData();
         this.limpiar();
         this.actualizarSistemasDePensiones();
-      });
+        Swal.fire({
+            position: "center",
+            title: "Sistema",
+            text: "Sistema de Pension Registrado !",
+            icon: "success",
+            confirmButtonText: "Ok",
+            timer: 3000,
+        });
+      }).catch(() => {
+          Swal.fire({
+              position: "center",
+              title: "Sistema",
+              text: "Sistema de Pension no se pudo registrar.",
+              icon: "error",
+              confirmButtonText: "Ok",
+              timer: 8000,
+          });
+          this.saveLoading = false;
+          this.dialogEjemplo = false;
+        });
     },
     editSistemaDePension() {
       if (this.valid == false) return;
       this.saveLoading = true;
-      post("sistemasdepensiones/" + this.editId,this.assembleSistemaDePension()).then(() => {
+      put("sistemasdepensiones/" + this.editId,this.assembleSistemaDePension()).then(() => {
           this.saveLoading = false;
           this.editId = null;
           this.dialogEjemplo = false;
           this.edit = false;
           this.fetchData();
           this.limpiar();
+          Swal.fire({
+              position: "center",
+              title: "Sistema",
+              text: "Sistema de Pension Modificado !",
+              icon: "success",
+              confirmButtonText: "Ok",
+              timer: 3000,
+          });
         }).catch(() => {
-          this.alert = true;          ///dfs
+          Swal.fire({
+              position: "center",
+              title: "Sistema",
+              text: "Sistema de Pension no se pudo modificar.",
+              icon: "error",
+              confirmButtonText: "Ok",
+              timer: 8000,
+          });
+          this.saveLoading = false;
+          this.editId = null;
+          this.dialogEjemplo = false;
+          this.edit = false;
+          this.limpiar();
         });
     },
     showEditSistemaDePension(sistemadepension) {
@@ -239,14 +266,36 @@ export default {
         this.dialogEjemplo = true;
       });
     },
-    cambiarEstadoSistemaDePension(sistemadepension) {
+    cambiarVigenciaSistemaDePension(sistemadepension) {
       patch("sistemadepension/" + sistemadepension.Codigo)
-        .then(() => {
+        .then((data) => {
+          let mensaje = '';
+          if(data.Vigencia == 1){
+            mensaje = 'Sistema de Pension Activado con Exito !';
+          }else{
+            mensaje = 'Sistema de Pension Desactivado con Exito !';
+          }
+
           this.fetchData();
           this.actualizarSistemasDePensiones();
+          Swal.fire({
+              position: "center",
+              title: "Sistema",
+              text: mensaje,
+              icon: "success",
+              confirmButtonText: "Ok",
+              timer: 3000,
+          });
         })
         .catch(() => {
-          this.alert = true;
+          Swal.fire({
+              position: "center",
+              title: "Sistema",
+              text: "Sistema de Pension Error Al Cambiar de Estado.",
+              icon: "error",
+              confirmButtonText: "Ok",
+              timer: 8000,
+          });
         });
     },
     actualizarSistemasDePensiones() {

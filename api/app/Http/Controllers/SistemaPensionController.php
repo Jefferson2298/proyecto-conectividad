@@ -49,8 +49,7 @@ class SistemaPensionController extends Controller
         return response()->json($sistemapension, 201);
     }
 
-    ///public function actualizar(Request $request, $id)
-    public function actualizar(Request $request, $id)
+    public function actualizar($id,Request $request)
     {
         $validacion = Validator::make($request->all(), [
             'Nombre' => 'required|max:100',
@@ -75,12 +74,11 @@ class SistemaPensionController extends Controller
         return response()->json($sistemapension, 200);
     }
 
-    public function cambiarEstado($id)
+    public function cambiarVigencia($id)
     {
         $sistemadepension = SistemaPension::findOrFail($id);
         $sistemadepension->Vigencia = !$sistemadepension->Vigencia;
         $sistemadepension->save();
-
         return response()->json($sistemadepension, 200);
     }
 }

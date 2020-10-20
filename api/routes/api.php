@@ -34,5 +34,5 @@ Route::patch('empresa/{id}', 'empresaController@cambiarEstado')->middleware('tok
 Route::get('sistemasdepensiones', 'SistemaPensionController@listar')->middleware('token');
 Route::get('sistemasdepensiones/{id}', 'SistemaPensionController@leer')->middleware('token');
 Route::post('sistemasdepensiones', 'SistemaPensionController@registrar')->middleware('token');
-Route::post('sistemasdepensiones/{id}', 'SistemaPensionController@actualizar')->middleware('token');
-Route::patch('sistemadepension/{id}', 'SistemaPensionController@cambiarEstado')->middleware('token');
+Route::put('sistemasdepensiones/{id}', 'SistemaPensionController@actualizar')->middleware('token');
+Route::patch('sistemadepension/{id}', 'SistemaPensionController@cambiarVigencia')->middleware('token');
