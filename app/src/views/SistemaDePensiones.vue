@@ -48,7 +48,11 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col><label style="color:red;">(*) Campos Obligatorios</label></v-col>
+            </v-row>
           </v-form>
+          
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -56,7 +60,7 @@
             v-if="edit"
             color="indigo darken-4"
             text
-            @click="(dialogEjemplo = false), limpiar()"
+            @click="(dialogEjemplo = false,edit = false), limpiar()"
             >Cancelar</v-btn>
             <v-btn
             v-else
@@ -112,12 +116,11 @@
                   <td>{{ item.Nombre }}</td>
                   <td>{{ item.Siglas }}</td>
                   <td>
-                    <v-icon v-if="item.Vigencia" class="mr-2" @click="showEditSistemaDePension(item)">mdi-border-color</v-icon>
-                    <v-icon v-else class="mr-2" color="red" @click="showEditSistemaDePension(item)">mdi-border-color</v-icon>
-                    <v-icon v-if="item.Vigencia" class="mr-2" @click="cambiarVigenciaSistemaDePension(item)">
+                    <v-icon class="mr-2" @click="showEditSistemaDePension(item)">mdi-border-color</v-icon>
+                    <v-icon v-if="item.Vigencia" class="mr-2" color="red" @click="cambiarVigenciaSistemaDePension(item)">
                       {{item.Vigencia? "mdi-close-circle-outline": "mdi-checkbox-marked-circle-outline"}}
                     </v-icon>
-                    <v-icon v-else class="mr-2" color="red" @click="cambiarVigenciaSistemaDePension(item)">
+                    <v-icon v-else class="mr-2" color="green" @click="cambiarVigenciaSistemaDePension(item)">
                       {{item.Vigencia? "mdi-close-circle-outline": "mdi-checkbox-marked-circle-outline"}}
                     </v-icon>
                   </td>
@@ -207,19 +210,19 @@ export default {
         Swal.fire({
             position: "center",
             title: "Sistema",
-            text: "Sistema de Pension Registrado !",
+            text: "Sistema de Pension registrado exitosamente",
             icon: "success",
             confirmButtonText: "Ok",
-            timer: 3000,
+            timer: 2500,
         });
       }).catch(() => {
           Swal.fire({
               position: "center",
               title: "Sistema",
-              text: "Sistema de Pension no se pudo registrar.",
+              text: "Sistema de Pension No Registrado.",
               icon: "error",
               confirmButtonText: "Ok",
-              timer: 8000,
+              timer: 5000,
           });
           this.saveLoading = false;
           this.dialogEjemplo = false;
@@ -238,24 +241,25 @@ export default {
           Swal.fire({
               position: "center",
               title: "Sistema",
-              text: "Sistema de Pension Modificado !",
+              text: "Sistema de Pension actualizado exitosamente",
               icon: "success",
               confirmButtonText: "Ok",
-              timer: 3000,
+              timer: 2500,
           });
         }).catch(() => {
           Swal.fire({
               position: "center",
               title: "Sistema",
-              text: "Sistema de Pension no se pudo modificar.",
+              text: "Sistema de Pension No Actualizado.",
               icon: "error",
               confirmButtonText: "Ok",
-              timer: 8000,
+              timer: 5000,
           });
           this.saveLoading = false;
           this.editId = null;
           this.dialogEjemplo = false;
           this.edit = false;
+          this.fetchData();
           this.limpiar();
         });
     },
@@ -271,9 +275,9 @@ export default {
         .then((data) => {
           let mensaje = '';
           if(data.Vigencia == 1){
-            mensaje = 'Sistema de Pension Activado con Exito !';
+            mensaje = 'Sistema de Pension dado de alta exitosamente';
           }else{
-            mensaje = 'Sistema de Pension Desactivado con Exito !';
+            mensaje = 'Sistema de Pension dado de baja exitosamente';
           }
 
           this.fetchData();
@@ -284,17 +288,17 @@ export default {
               text: mensaje,
               icon: "success",
               confirmButtonText: "Ok",
-              timer: 3000,
+              timer: 2500,
           });
         })
         .catch(() => {
           Swal.fire({
               position: "center",
               title: "Sistema",
-              text: "Sistema de Pension Error Al Cambiar de Estado.",
+              text: "Sistema de Pension No Pudo Cambiar De Estado.",
               icon: "error",
               confirmButtonText: "Ok",
-              timer: 8000,
+              timer: 5000,
           });
         });
     },
